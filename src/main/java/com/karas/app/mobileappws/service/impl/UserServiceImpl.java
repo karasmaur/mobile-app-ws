@@ -4,6 +4,7 @@ import com.karas.app.mobileappws.repository.UserRepository;
 import com.karas.app.mobileappws.io.entity.UserEntity;
 import com.karas.app.mobileappws.service.UserService;
 import com.karas.app.mobileappws.shared.dto.UserDto;
+import com.karas.app.mobileappws.shared.dto.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    Utils utils;
 
     @Override
     public UserDto createUser(UserDto user) {
@@ -24,10 +28,11 @@ public class UserServiceImpl implements UserService {
 
         BeanUtils.copyProperties(user, userEntity);
 
-        // TODO: Hardcoded password and id, should be removed later.
+        // TODO: Hardcoded password, should be implemented later.
         userEntity.setEncryptedPassword("test");
-        userEntity.setUserId("testUserId");
         //
+
+        userEntity.setUserId(utils.generateUserId(30));
 
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
