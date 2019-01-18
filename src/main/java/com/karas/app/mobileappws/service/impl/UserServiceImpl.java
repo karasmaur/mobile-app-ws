@@ -7,6 +7,7 @@ import com.karas.app.mobileappws.shared.dto.UserDto;
 import com.karas.app.mobileappws.shared.dto.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     Utils utils;
 
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     public UserDto createUser(UserDto user) {
 
@@ -28,9 +32,7 @@ public class UserServiceImpl implements UserService {
 
         BeanUtils.copyProperties(user, userEntity);
 
-        // TODO: Hardcoded password, should be implemented later.
-        userEntity.setEncryptedPassword("test");
-        //
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         userEntity.setUserId(utils.generateUserId(30));
 
