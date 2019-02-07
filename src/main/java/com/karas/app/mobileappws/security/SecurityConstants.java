@@ -1,9 +1,16 @@
 package com.karas.app.mobileappws.security;
 
+import com.karas.app.mobileappws.SpringApplicationContext;
+
 public class SecurityConstants {
     public static final long EXPIRATION_TIME = 864000000;
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
     public static final String SIGN_UP_URL = "/users";
-    public static final String TOKEN_SECRET = "87g4x85sf1qqe7";
+
+    public static String getTokenSecret(){
+        AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");
+        return appProperties.getTokenSecret();
+    }
+
 }
