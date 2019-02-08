@@ -62,10 +62,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(String id) throws UsernameNotFoundException {
+    public UserDto getUserByUserId(String id) throws UsernameNotFoundException {
         UserDto returnValue = new UserDto();
 
-        UserEntity userEntity = userRepository.findById(id);
+        UserEntity userEntity = userRepository.findByUserId(id);
 
         if(userEntity == null) throw new UsernameNotFoundException(id);
 
