@@ -4,6 +4,7 @@ package com.karas.app.mobileappws.ui.controller;
 import com.karas.app.mobileappws.service.UserService;
 import com.karas.app.mobileappws.shared.dto.UserDto;
 import com.karas.app.mobileappws.ui.model.request.UserDetailRequestModel;
+import com.karas.app.mobileappws.ui.model.response.ErrorMessages;
 import com.karas.app.mobileappws.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,10 @@ public class UserController {
             consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
             )
-    public UserRest createUser(@RequestBody UserDetailRequestModel userDetails){
+    public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) throws Exception {
         UserRest returnValue = new UserRest();
+
+        if(userDetails.getFirstName().isEmpty()) throw new Exception(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
