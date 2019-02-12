@@ -1,6 +1,7 @@
 package com.karas.app.mobileappws.ui.controller;
 
 
+import com.karas.app.mobileappws.exceptions.UserServiceException;
 import com.karas.app.mobileappws.service.UserService;
 import com.karas.app.mobileappws.shared.dto.UserDto;
 import com.karas.app.mobileappws.ui.model.request.UserDetailRequestModel;
@@ -35,7 +36,7 @@ public class UserController {
     public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) throws Exception {
         UserRest returnValue = new UserRest();
 
-        if(userDetails.getFirstName().isEmpty()) throw new Exception(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+        if(userDetails.getFirstName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
