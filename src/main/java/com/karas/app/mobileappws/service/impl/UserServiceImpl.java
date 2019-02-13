@@ -1,10 +1,12 @@
 package com.karas.app.mobileappws.service.impl;
 
+import com.karas.app.mobileappws.exceptions.UserServiceException;
 import com.karas.app.mobileappws.repository.UserRepository;
 import com.karas.app.mobileappws.io.entity.UserEntity;
 import com.karas.app.mobileappws.service.UserService;
 import com.karas.app.mobileappws.shared.dto.UserDto;
 import com.karas.app.mobileappws.shared.dto.Utils;
+import com.karas.app.mobileappws.ui.model.response.ErrorMessages;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -45,6 +47,26 @@ public class UserServiceImpl implements UserService {
 
         UserDto returnValue = new UserDto();
         BeanUtils.copyProperties(storedUserDetails, returnValue);
+
+        return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(String id, UserDto user) {
+        UserDto returnValue = new UserDto();
+
+        UserEntity userEntity = userRepository.findByUserId(id);
+
+        if(userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        if(!user.getFirstName().isEmpty())
+            userEntity.setFirstName(user.getFirstName());
+        if(!user.getLastName().isEmpty())
+            userEntity.setLastName(user.getLastName());
+
+        UserEntity updatedUser = userRepository.save(userEntity);
+
+        BeanUtils.copyProperties(updatedUser, returnValue);
 
         return returnValue;
     }
