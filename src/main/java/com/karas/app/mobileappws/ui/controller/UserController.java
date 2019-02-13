@@ -5,8 +5,7 @@ import com.karas.app.mobileappws.exceptions.UserServiceException;
 import com.karas.app.mobileappws.service.UserService;
 import com.karas.app.mobileappws.shared.dto.UserDto;
 import com.karas.app.mobileappws.ui.model.request.UserDetailRequestModel;
-import com.karas.app.mobileappws.ui.model.response.ErrorMessages;
-import com.karas.app.mobileappws.ui.model.response.UserRest;
+import com.karas.app.mobileappws.ui.model.response.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -62,8 +61,15 @@ public class UserController {
         return returnValue;
     }
 
-    @DeleteMapping
-    public String deleteUser(){
-        return "delete user";
+    @DeleteMapping(path="/{id}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public OperationStatusModel deleteUser(@PathVariable String id){
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        userService.deleteUser(id);
+
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+
+        return returnValue;
     }
 }
